@@ -2,10 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const taskRoutes = require('./routes/tasks-routes');
+const HttpError = require('../backend/models/http-error');
 
 const app = express();
 
+app.use(bodyParser.json());
 app.use('/api/tasks', taskRoutes);
+app.use((req, res, next) => {
+    const error = new HttpError('Route not found', 404)
+    throw error;
+});
 
 app.use((error, req, res, next) => {
     if (res.headerSent) {

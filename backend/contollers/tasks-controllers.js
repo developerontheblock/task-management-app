@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const HttpError = require('../models/http-error');
 
 const DUMMY_TASKS = [
@@ -37,6 +38,22 @@ const getTaskByUserId = (req, res, next) => {
     res.json({task});
 };
 
+const createTask = (req, res, next) => {
+    const { title, description, creator } = req.body;
+    const createdTask = {
+        id: uuidv4(),
+        title,
+        description,
+        creator
+    };
+
+    DUMMY_TASKS.push(createdTask);
+
+    res.status(201).json({place: createdTask});
+};
+
 exports.getTaskById = getTaskById;
 exports.getTaskByUserId = getTaskByUserId;
+exports.createTask = createTask;
+
 
