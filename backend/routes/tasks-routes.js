@@ -1,6 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
+const HttpError = require('../models/http-error');
 
 const DUMMY_TASKS = [
     {
@@ -16,6 +17,11 @@ router.get('/:tid', (req, res, next) => {
     const task = DUMMY_TASKS.find(t => {
         return t.id === taskId;
     });
+
+    if (!task) {
+        throw new HttpError('Could not find a task for the provided id.', 404);
+    }
+
     res.json({task});
 });
 
@@ -24,6 +30,13 @@ router.get('/user/:uid', (req, res, next) => {
     const task = DUMMY_TASKS.find(t => {
         return t.creator === userId;
     });
+
+    if (!task) {
+        return next(
+            new HttpError('Could not find a task for the provided user id.', 404)
+        );
+    }
+
     res.json({task});
 });
 
