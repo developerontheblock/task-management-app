@@ -1,4 +1,6 @@
 const {v4: uuidv4} = require('uuid');
+const {validationResult} = require('express-validator');
+
 const HttpError = require('../models/http-error');
 
 let DUMMY_TASKS = [
@@ -39,6 +41,11 @@ const getTasksByUserId = (req, res, next) => {
 };
 
 const createTask = (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        throw new HttpError('Invalid input', 422);
+    }
     const {title, description, creator} = req.body;
     const createdTask = {
         id: uuidv4(),
@@ -53,25 +60,35 @@ const createTask = (req, res, next) => {
 };
 
 const updateTask = (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        throw new HttpError('Invalid input', 422);
+    }
+
     const {title, description} = req.body;
     const taskId = req.params.tid;
 
-    const updatedTask = {...DUMMY_TASKS.find(t => t.id === taskId) }; //this created new obj and copies all the key-value pairs from old obj
+    const updatedTask = {...DUMMY_TASKS.find(t => t.id === taskId)}; //this created new obj and copies all the key-value pairs from old obj
     const taskIndex = DUMMY_TASKS.findIndex(t => t.id === taskId);
 
     updatedTask.title = title;
     updatedTask.description = description;
     DUMMY_TASKS[taskIndex] = updatedTask;
 
-    res.status(200).json({task: updatedTask });
+    res.status(200).json({task: updatedTask});
 
 };
 const deleteTask = (req, res, next) => {
     const taskId = req.params.tid;
 
+    if(!DUMMY_TASKS.find(t=> t.id === taskId)){
+        throw new HttpError('Could not find a task with that id', 404);
+    }
+
     DUMMY_TASKS = DUMMY_TASKS.filter(t => t.id !== taskId);
 
-    res.status(200).json({message: 'Successfully deleted' });
+    res.status(200).json({message: 'Successfully deleted'});
 };
 
 exports.getTaskById = getTaskById;
