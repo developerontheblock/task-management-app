@@ -4,15 +4,6 @@ const {validationResult} = require('express-validator');
 const HttpError = require('../models/http-error');
 const Task = require('../models/task');
 
-let DUMMY_TASKS = [
-    {
-        id: 't1',
-        title: 'bug task',
-        description: 'This task contains a bug',
-        creator: 'u1'
-    }
-];
-
 const getTaskById = async (req, res, next) => {
     const taskId = req.params.tid;
     let task;
@@ -88,12 +79,11 @@ const updateTask = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        throw new HttpError('Invalid input', 422);
+        return next(new HttpError('Invalid input', 422));
     }
 
     const {title, description} = req.body;
     const taskId = req.params.tid;
-
 
     let task;
     try {
@@ -139,7 +129,7 @@ const deleteTask = async (req, res, next) => {
         );
         return next(error);
     }
-    
+
     res.status(200).json({message: 'Successfully deleted'});
 };
 
