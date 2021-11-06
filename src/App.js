@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 import Users from './users/pages/Users';
 import NewTask from "./tasks/pages/NewTask";
 import UserTasks from "./tasks/pages/UserTasks";
+import Auth from './users/pages/Auth';
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 
 const App = () => {
@@ -22,6 +23,9 @@ const App = () => {
                 </Route>
                 <Route path="/tasks/new" exact>
                     <NewTask />
+                </Route>
+                <Route path="/auth" exact>
+                    <Auth />
                 </Route>
                 <Redirect to="/" />
             </Switch>

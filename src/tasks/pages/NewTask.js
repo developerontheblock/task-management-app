@@ -1,8 +1,87 @@
-import React from 'react';
+import React, {useCallback, useReducer} from 'react';
 
-const NewTask =() => {
-    return <h2>New task</h2>
+import Input from "../../shared/components/FormElements/Input";
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from '../../shared/util/validators';
+import Button from '../../shared/components/FormElements/Button';
+import './NewTask.css';
+
+const formReducer = (state, action) => {
+    switch (action.type) {
+        case 'INPUT_CHANGE':
+            let formIsValid = true;
+            for (const inputId in state.inputs) {
+                if (inputId === action.inputId) {
+                    formIsValid = formIsValid && action.isValid;
+                } else {
+                    formIsValid = formIsValid && state.inputs[inputId].isValid;
+                }
+            }
+            return {
+                ...state,
+                inputs: {
+                    ...state.inputs,
+                    [action.inputId]: { value: action.value, isValid: action.isValid }
+                },
+                isValid: formIsValid
+            };
+        default:
+            return state;
+    }
 };
 
+const NewTask = () => {
+    const [formState, dispatch] = useReducer(formReducer, {
+        inputs: {
+            title: {
+                value: '',
+                isValid: false
+            },
+            description: {
+                value: '',
+                isValid: false
+            }
+        },
+        isValid: false
+    });
+
+    const inputHandler = useCallback((id, value, isValid) => {
+        dispatch({
+            type: 'INPUT_CHANGE',
+            value: value,
+            isValid: isValid,
+            inputId: id
+        });
+    }, []);
+
+    const taskSubmitHandler = event => {
+        event.preventDefault();
+        console.log(formState.inputs); // send this to the backend!
+    };
+    return (
+        <form className="task-form" onSubmit={taskSubmitHandler}>
+            <Input
+                id="title"
+                element="input"
+                type="text"
+                label="Title"
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="Please enter a valid title."
+                onInput={inputHandler}
+            />
+            <Input
+                id="description"
+                element="textarea"
+                type="text"
+                label="Description"
+                validators={[VALIDATOR_MINLENGTH(10)]}
+                errorText="Please enter a valid description at least 10 characters."
+                onInput={inputHandler}
+            />
+            <Button type="submit" disabled={!formState.isValid}>
+                Add task
+            </Button>
+        </form>
+    );
+};
 
 export default NewTask;

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 
+import Button from "../../shared/components/FormElements/Button";
 import './TaskItem.css';
 
 const TaskItem = props => {
@@ -10,8 +11,8 @@ const TaskItem = props => {
                 <p>{props.description}</p>
             </div>
             <div className="task-item__actions">
-                <button>EDIT</button>
-                <button>DELETE</button>
+                <Button to={`/tasks/${props.id}`}>EDIT</Button>
+                <Button danger>DELETE</Button>
             </div>
         </div>
     </li>
