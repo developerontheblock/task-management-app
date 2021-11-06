@@ -1,4 +1,3 @@
-import "./App.css";
 import React from "react";
 
 import {useParams} from "react-router-dom"; // for dynamic segments like '/:userId'
