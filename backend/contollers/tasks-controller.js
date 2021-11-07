@@ -1,13 +1,15 @@
 const {v4: uuidv4} = require('uuid');
 const {validationResult} = require('express-validator');
+const mongoose = require('mongoose');
 
 const HttpError = require('../models/http-error');
 const Task = require('../models/task');
+const User = require('../models/users');
 
 const getTaskById = async (req, res, next) => {
     const taskId = req.params.tid;
-    let task;
 
+    let task;
     try {
         task = await Task.findById(taskId);
     } catch (err) {
@@ -30,9 +32,10 @@ const getTaskById = async (req, res, next) => {
 const getTasksByUserId = async (req, res, next) => {
     const userId = req.params.uid;
 
-    let tasks;
+    let userWithTasks;
     try {
-        tasks = await Task.find({creator: userId});
+        // populate() -> access to the corresponding tasks that user has
+        userWithTasks = await User.findById(userId).populate('tasks');
     } catch (err) {
         const error = new HttpError(
             'fetching task failed', 500
@@ -40,13 +43,13 @@ const getTasksByUserId = async (req, res, next) => {
         return next(error);
     }
 
-    if (!tasks || tasks.length === 0) {
+    if (!userWithTasks || userWithTasks.tasks.length === 0) {
         return next(
             new HttpError('Could not find tasks for the provided user id.', 404)
         );
     }
     // getters: true -> the same id without underscore
-    res.json({tasks: tasks.map(place => place.toObject({getters: true}))});
+    res.json({tasks: userWithTasks.tasks.map(task => task.toObject({getters: true}))});
 };
 
 const createTask = async (req, res, next) => {
@@ -63,8 +66,9 @@ const createTask = async (req, res, next) => {
         creator
     });
 
+    let user;
     try {
-        await createdTask.save();
+        user = await User.findById(creator);
     } catch (err) {
         const error = new HttpError(
             'creating task failed. Try again', 500
@@ -72,7 +76,32 @@ const createTask = async (req, res, next) => {
         return next(error);
     }
 
-    res.status(201).json({place: createdTask});
+    if(!user){
+        const error = new HttpError(
+            'cannot find user with this id', 404
+        );
+        return next(error);
+    }
+
+    try {
+        // transaction allows to perform multiple operations in isolation of each other. Build on sessions
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+
+        createdTask.save({ session: sess});
+        user.tasks.push(createdTask);
+
+        await user.save({ session: sess });
+        sess.commitTransaction();
+    } catch (err) {
+         // this error will occur when db server is down or db validation fail
+        const error = new HttpError(
+            'creating task failed. Try again', 500
+        );
+        return next(error);
+    }
+
+    res.status(201).json({task: createdTask});
 };
 
 const updateTask = async (req, res, next) => {
@@ -114,15 +143,32 @@ const deleteTask = async (req, res, next) => {
 
     let task;
     try {
-        task = await Task.findById(taskId);
+        // .populate() -> to refer to a doc. in another collection and to work with data in that existing doc. of that another collection
+        task = await Task.findById(taskId).populate('creator');
     } catch (err) {
         const error = new HttpError(
             'delete failed', 500
         );
         return next(error);
     }
+
+    if(!task){
+        const error = new HttpError(
+            'There is no task with that id', 404
+        );
+        return next(error);
+    }
+
     try {
-        await task.remove();
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+
+        await task.remove({ session: sess });
+        task.creator.tasks.pull(task);
+
+        await task.creator.save({ session: sess });
+        await sess.commitTransaction();
+
     } catch (err) {
         const error = new HttpError(
             'delete failed', 500
