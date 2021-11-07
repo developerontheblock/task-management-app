@@ -15,7 +15,7 @@ const MainNavigation = props => {
               </button>
               <h1 className="main-navigation__title">
                   <Link to="/">
-                      Your Tasks
+                    Task management app
                   </Link>
               </h1>
               <nav className="main-navigation__header-nav">

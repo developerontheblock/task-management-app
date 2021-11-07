@@ -88,15 +88,17 @@ const createTask = async (req, res, next) => {
         const sess = await mongoose.startSession();
         sess.startTransaction();
 
-        createdTask.save({ session: sess});
+        await createdTask.save({ session: sess });
         user.tasks.push(createdTask);
 
         await user.save({ session: sess });
-        sess.commitTransaction();
+        await sess.commitTransaction();
     } catch (err) {
-         // this error will occur when db server is down or db validation fail
+        console.log(err);
+
+        // this error will occur when db server is down or db validation fail
         const error = new HttpError(
-            'creating task failed. Try again', 500
+            'creating task failed. Try again!!!', 500
         );
         return next(error);
     }

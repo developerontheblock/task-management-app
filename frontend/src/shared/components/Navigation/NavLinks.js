@@ -13,7 +13,7 @@ const NavLinks = props => {
         </li>
         {auth.isLoggedIn && (
             <li>
-                <NavLink to="/u1/tasks">My Tasks</NavLink>
+                <NavLink to={`/${auth.userId}/tasks`}>My Tasks</NavLink>
             </li>
         )}
         {auth.isLoggedIn && (

@@ -1,28 +1,42 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 import TaskList from "../components/TaskList";
 import {useParams} from "react-router-dom";
+import {useHttpClient} from "../../shared/hooks/http-hook";
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
-// dummy array with data
-const TASKS = [
-    {
-      id: 't1',
-      title: 'Frontend bug',
-      description: 'This bug need to be fixed',
-      creator: 'u1'
-    },
-    {
-        id: 't2',
-        title: 'Backend bug',
-        description: 'This bug need to be fixed. It is with high priority',
-        creator: 'u2'
-    }
-]
 const UserTasks = () => {
+    const [loadedTasks, setLoadedTasks] = useState();
+    const {isLoading, error, sendRequest, clearError} = useHttpClient();
     const userId = useParams().userId;
-    const loadedTasks = TASKS.filter(task => task.creator === userId); // only load task, which are created by specific user
 
-    return <TaskList items={loadedTasks}/>
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const responseData = await sendRequest(`http://localhost:5000/api/tasks/user/${userId}`);
+                setLoadedTasks(responseData.tasks);
+            } catch (err) {
+
+            }
+        };
+        fetchTasks();
+    }, [sendRequest, userId]);
+
+    const taskDeletedHandler = deletedTaskId => {
+        setLoadedTasks(prevTasks =>
+            prevTasks.filter(task => task.id !== deletedTaskId)
+        );
+    };
+    return (
+        <React.Fragment>
+            {isLoading && (
+                <div className="center">
+                    <LoadingSpinner/>
+                </div>
+            )}
+            {!isLoading && loadedTasks && <TaskList items={loadedTasks} onDeleteTask={taskDeletedHandler}/>}
+        </React.Fragment>
+    )
 };
 
 export default UserTasks;

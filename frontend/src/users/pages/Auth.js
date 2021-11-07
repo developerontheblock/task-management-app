@@ -59,19 +59,9 @@ const Auth = () => {
         event.preventDefault();
 
         if (isLoginMode) {
-
-            // const response = await fetch('http://localhost:5000/api/users/login', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({
-            //         email: formState.inputs.email.value,
-            //         password: formState.inputs.password.value
-            //     })
-            // });
             try {
-                await sendRequest(
+                // const response = await fetch(url, {method, headers, body});
+                const responseData = await sendRequest(
                     'http://localhost:5000/api/users/login',
                     'POST',
                     JSON.stringify({
@@ -82,25 +72,15 @@ const Auth = () => {
                         'Content-Type': 'application/json'
                     });
 
-                auth.login();
+                auth.login(responseData.user.id);
             } catch (err) {
 
             }
         } else {
             try {
-                // const response = await fetch('http://localhost:5000/api/users/signup', {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/json'
-                //     },
-                //     body: JSON.stringify({
-                //         name: formState.inputs.name.value,
-                //         email: formState.inputs.email.value,
-                //         password: formState.inputs.password.value
-                //     })
-                // });
-
-                await sendRequest('http://localhost:5000/api/users/signup',
+                // const response = await fetch(url, {method, headers, body});
+                const responseData = await sendRequest(
+                    'http://localhost:5000/api/users/signup',
                     'POST',
                     JSON.stringify({
                         name: formState.inputs.name.value,
@@ -109,7 +89,7 @@ const Auth = () => {
                     }),
                     {'Content-Type': 'application/json'});
 
-                auth.login();
+                auth.login(responseData.user.id);
             } catch (err) {
 
             }
@@ -151,8 +131,8 @@ const Auth = () => {
                         id="password"
                         type="password"
                         label="Password"
-                        validators={[VALIDATOR_MINLENGTH(5)]}
-                        errorText="Please enter a valid password, at least 5 characters."
+                        validators={[VALIDATOR_MINLENGTH(6)]}
+                        errorText="Please enter a valid password, at least 6 characters."
                         onInput={inputHandler}
                     />
                     <Button type="submit" disabled={!formState.isValid}>

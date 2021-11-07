@@ -6,7 +6,7 @@ import './TaskList.css'
 
 const TaskList = props => {
 
-    if(props.items.length === 0) {
+    if (props.items.length === 0) {
         return (
             <div className="task-list center">
                 <h2>No tasks found</h2>
@@ -21,7 +21,10 @@ const TaskList = props => {
                 id={task.id}
                 title={task.title}
                 description={task.description}
-                creatorId={task.creator} />)}
+                creatorId={task.creator}
+                onDelete={props.onDeleteTask}
+            />
+        )}
     </ul>
 };
 
