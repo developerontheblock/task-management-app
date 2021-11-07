@@ -1,39 +1,70 @@
-import React from "react";
+import React, {useState, useCallback} from "react";
 
 import {useParams} from "react-router-dom"; // for dynamic segments like '/:userId'
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
+import {BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom'
 import Users from './users/pages/Users';
 import NewTask from "./tasks/pages/NewTask";
 import UserTasks from "./tasks/pages/UserTasks";
 import UpdateTask from '../src/tasks/pages/UpdateTask';
 import Auth from './users/pages/Auth';
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
+import {AuthContext} from "./shared/context/auth-context";
 
 const App = () => {
-    return(
-    <Router>
-        <MainNavigation />
-        <main>
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const login = useCallback(() => {
+        setIsLoggedIn(true);
+    }, []);
+
+    const logout = useCallback(() => {
+        setIsLoggedIn(false);
+    }, []);
+
+    let routes;
+    if (isLoggedIn) {
+        routes = (
             <Switch>
                 <Route path="/" exact>
-                     <Users />
+                    <Users/>
                 </Route>
-                <Route path="/:userId/tasks">
-                    <UserTasks />
+                <Route path="/:userId/tasks" exact>
+                    <UserTasks/>
                 </Route>
                 <Route path="/tasks/new" exact>
-                    <NewTask />
+                    <NewTask/>
                 </Route>
                 <Route path="/tasks/:taskId">
-                    <UpdateTask />
+                    <UpdateTask/>
+                </Route>
+                <Redirect to="/"/>
+            </Switch>
+        );
+    } else {
+        routes = (
+            <Switch>
+                <Route path="/" exact>
+                    <Users/>
+                </Route>
+                <Route path="/:userId/tasks">
+                    <UserTasks/>
                 </Route>
                 <Route path="/auth" exact>
-                    <Auth />
+                    <Auth/>
                 </Route>
-                <Redirect to="/" />
+                <Redirect to="/auth"/>
             </Switch>
-        </main>
-    </Router>
+        );
+    }
+
+    return (
+        // when isLoggedIn changes this new value will be passed out to all the components that are interested
+        <AuthContext.Provider value={{isLoggedIn: isLoggedIn, login: login, logout: logout}}>
+            <Router>
+                <MainNavigation/>
+                <main> {routes} </main>
+            </Router>
+        </AuthContext.Provider>
     );
 };
 
