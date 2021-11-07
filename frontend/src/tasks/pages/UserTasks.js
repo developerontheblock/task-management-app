@@ -16,7 +16,7 @@ const TASKS = [
         title: 'Backend bug',
         description: 'This bug need to be fixed. It is with high priority',
         creator: 'u2'
-    },
+    }
 ]
 const UserTasks = () => {
     const userId = useParams().userId;
