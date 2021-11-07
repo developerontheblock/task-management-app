@@ -1,12 +1,45 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import UsersList from "../components/UsersList";
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import {useHttpClient} from "../../shared/hooks/http-hook";
 
 const Users = () => {
-  const USERS = [{id: 'u1', name: 'Alex', image: 'image', tasks: 3}]; //temporary dummy data
-    return(
-        <UsersList
-        items={USERS}/>
+    const {isLoading, error, sendRequest, clearRequest} = useHttpClient();
+    const [loadedUsers, setLoadedUsers] = useState();
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                // the default req type with fetch() is GET
+                const responseData = await sendRequest('http://localhost:5000/api/users');
+
+                // the users-key is needed from users-controller from the backend [getUsers]
+                setLoadedUsers(responseData.users);
+            } catch (err) {
+            }
+        };
+        fetchUsers();
+    }, [sendRequest]);
+
+    const errorHandler = () => {
+        clearRequest();
+    }
+
+    return (
+        <React.Fragment>
+            <div>{error}</div>
+            {isLoading && (
+                <div className="center">
+                    <LoadingSpinner/>
+                </div>
+            )}
+            {!isLoading && loadedUsers &&
+            <UsersList
+                items={loadedUsers}/>
+            }
+        </React.Fragment>
+
     )
 };
 

@@ -1,10 +1,11 @@
 .user-item {
-    margin: 1rem;
+    margin: 1.3rem;
     width: calc(45% - 2rem);
     min-width: 17.5rem;
 }
 
 .user-item a {
+    border-radius: 25px;
     display: flex;
     align-items: center;
     width: 100%;
@@ -12,12 +13,12 @@
     text-decoration: none;
     padding: 1rem;
     color: white;
-    background: #292929;
+    background: grey;
 }
 
 .user-item a:hover,
 .user-item a:active {
-    background: #ffd900;
+    background: #ADD8E6;
 }
 
 .user-item__content {
