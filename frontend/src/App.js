@@ -1,6 +1,5 @@
-import React, {useState, useCallback} from "react";
+import React from "react";
 
-import {useParams} from "react-router-dom"; // for dynamic segments like '/:userId'
 import {BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom'
 import Users from './users/pages/Users';
 import NewTask from "./tasks/pages/NewTask";
@@ -9,21 +8,12 @@ import UpdateTask from '../src/tasks/pages/UpdateTask';
 import Auth from './users/pages/Auth';
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import {AuthContext} from "./shared/context/auth-context";
+import {useAuth} from "./shared/hooks/auth-hook";
 
+// runs when app starting up
 const App = () => {
-    const [token, setToken] = useState(false);
-    const [userId, setUserId] = useState(false);
 
-    const login = useCallback((uid, token) => {
-        setToken(token);
-        setUserId(uid);
-    }, []);
-
-    const logout = useCallback(() => {
-        setToken(null);
-        setUserId(null);
-    }, []);
-
+    const {token, login, logout, userId} = useAuth();
     let routes;
     if (token) {
         routes = (

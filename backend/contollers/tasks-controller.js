@@ -60,17 +60,17 @@ const createTask = async (req, res, next) => {
         );
     }
 
-    const {title, description, creator} = req.body;
+    const {title, description} = req.body;
 
     const createdTask = new Task({
         title,
         description,
-        creator
+        creator: req.userDate.userId
     });
 
     let user;
     try {
-        user = await User.findById(creator);
+        user = await User.findById(req.userDate.userId);
     } catch (err) {
         const error = new HttpError(
             'creating task failed. Try again', 500

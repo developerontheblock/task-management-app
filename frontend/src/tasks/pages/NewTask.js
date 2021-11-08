@@ -35,7 +35,6 @@ const NewTask = () => {
             const formData = new FormData();
             formData.append('title', formState.inputs.title.value);
             formData.append('description', formState.inputs.description.value);
-            formData.append('creator', auth.userId);
             await sendRequest('http://localhost:5000/api/tasks', 'POST', formData, {
                 Authorization: 'Bearer ' + auth.token
             });
