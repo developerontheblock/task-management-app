@@ -37,8 +37,10 @@ app.use((error, req, res, next) => {
     res.json({message: error.message || 'An unknown error occurred!'});
 });
 
-mongoose.connect('mongodb+srv://user1:user1password@cluster0.3sm79.mongodb.net/task-management-app?retryWrites=true&w=majority').then(() => {
-    app.listen(5000);
-}).catch(err => {
+mongoose
+    .connect(`mongodb+srv://user1:user1password@cluster0.3sm79.mongodb.net/task-management-app?retryWrites=true&w=majority`)
+    .then(() => {
+        app.listen(5000);
+    }).catch(err => {
     console.log(err);
 });

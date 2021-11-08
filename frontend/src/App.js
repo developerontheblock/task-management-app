@@ -64,12 +64,13 @@ const App = () => {
         // when isLoggedIn changes this new value will be passed out to all the components that are interested
         <AuthContext.Provider
             value={{
-            isLoggedIn: !!token, //convert to true if it is Truthy
-            token: token,
-            userId: userId,
-            login: login,
-            logout: logout
-        }}>
+                isLoggedIn: !!token, //convert to true if it is Truthy
+                token: token,
+                userId: userId,
+                login: login,
+                logout: logout
+            }}
+        >
             <Router>
                 <MainNavigation/>
                 <main> {routes} </main>

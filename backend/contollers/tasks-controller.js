@@ -1,5 +1,5 @@
 const {v4: uuidv4} = require('uuid');
-const {validationResult} = require('express-validator');
+const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 
 const HttpError = require('../models/http-error');
@@ -54,10 +54,12 @@ const getTasksByUserId = async (req, res, next) => {
 
 const createTask = async (req, res, next) => {
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
-        throw new HttpError('Invalid input', 422);
+        return next(
+            new HttpError('Invalid inputs passed, please check your data.', 422)
+        );
     }
+
     const {title, description, creator} = req.body;
 
     const createdTask = new Task({
@@ -94,8 +96,6 @@ const createTask = async (req, res, next) => {
         await user.save({session: sess});
         await sess.commitTransaction();
     } catch (err) {
-        console.log(err);
-
         // this error will occur when db server is down or db validation fail
         const error = new HttpError(
             'creating task failed. Try again!!!', 500
@@ -125,6 +125,14 @@ const updateTask = async (req, res, next) => {
         );
         return next(error);
     }
+
+    if(task.creator.toString() !== req.userData.userId){
+        const error = new HttpError(
+            'You are not allowed to update this task', 401
+        );
+        return next(error);
+    }
+
     task.title = title;
     task.description = description;
 
@@ -157,6 +165,13 @@ const deleteTask = async (req, res, next) => {
     if (!task) {
         const error = new HttpError(
             'There is no task with that id', 404
+        );
+        return next(error);
+    }
+
+    if(task.creator.id !== req.userData.userId){
+        const error = new HttpError(
+            'You are not allowed to delete this task', 401
         );
         return next(error);
     }

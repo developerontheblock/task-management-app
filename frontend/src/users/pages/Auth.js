@@ -73,26 +73,21 @@ const Auth = () => {
                     });
 
                 auth.login(responseData.userId, responseData.token);
-            } catch (err) {
-
-            }
+            } catch (err) { }
         } else {
             try {
-                // const response = await fetch(url, {method, headers, body});
+                const formData = new FormData();
+                formData.append('email', formState.inputs.email.value);
+                formData.append('name', formState.inputs.name.value);
+                formData.append('password', formState.inputs.password.value);
                 const responseData = await sendRequest(
                     'http://localhost:5000/api/users/signup',
                     'POST',
-                    JSON.stringify({
-                        name: formState.inputs.name.value,
-                        email: formState.inputs.email.value,
-                        password: formState.inputs.password.value
-                    }),
-                    {'Content-Type': 'application/json'});
+                    formData
+                );
 
                 auth.login(responseData.userId, responseData.token);
-            } catch (err) {
-
-            }
+            } catch (err) { }
         }
     };
 
@@ -108,15 +103,17 @@ const Auth = () => {
                 <h2>Login Required</h2>
                 <hr/>
                 <form onSubmit={authSubmitHandler}>
-                    {!isLoginMode && <Input
-                        element="input"
-                        id="name"
-                        type="text"
-                        label="Your name"
-                        validators={[VALIDATOR_REQUIRE()]}
-                        errorText="Please enter a name"
-                        onInput={inputHandler}
-                    />}
+                    {!isLoginMode && (
+                        <Input
+                            element="input"
+                            id="name"
+                            type="text"
+                            label="Your Name"
+                            validators={[VALIDATOR_REQUIRE()]}
+                            errorText="Please enter a name."
+                            onInput={inputHandler}
+                        />
+                    )}
                     <Input
                         element="input"
                         id="email"

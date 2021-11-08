@@ -1,6 +1,6 @@
 const {v4: uuidv4} = require('uuid');
-const {validationResult} = require("express-validator");
-const bctypt = require('bcryptjs');
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const HttpError = require('../models/http-error');
@@ -48,9 +48,11 @@ const signup = async (req, res, next) => {
 
     let hashedPassword;
     try {
-        hashedPassword = await bctypt.hash(password, 12);
+        hashedPassword = await bcrypt.hash(password, 12);
     } catch (err) {
-        const error = new HttpError('Could not create a user', 500);
+        const error = new HttpError(
+            'Could not create a user', 500
+        );
         return next(error);
     }
 
@@ -72,6 +74,7 @@ const signup = async (req, res, next) => {
 
     let token;
     try {
+        // returns string(token)
         token = jwt.sign(
             { userId: createdUser.id, email: createdUser.email },
             'supersecret',
@@ -106,7 +109,7 @@ const login = async (req, res, next) => {
 
     if (!existingUser) {
         const error = new HttpError(
-            'invalid credentials', 401
+            'invalid credentials', 403
         );
         return next(error);
     }
@@ -115,15 +118,16 @@ const login = async (req, res, next) => {
     try {
         isValidPassword = await bcrypt.compare(password, existingUser.password);
     } catch (err) {
+        // server side error !!!not error from invalid credentials
         const error = new HttpError(
-            'check your credentials!', 500
+            '[Server side error]Check your credentials!', 500
         );
         return next(error);
     }
 
     if (!isValidPassword) {
         const error = new HttpError(
-            'invalid credentials', 401
+            'invalid credentials', 403
         );
         return next(error);
     }
