@@ -76,7 +76,7 @@ const createTask = async (req, res, next) => {
         return next(error);
     }
 
-    if(!user){
+    if (!user) {
         const error = new HttpError(
             'cannot find user with this id', 404
         );
@@ -88,10 +88,10 @@ const createTask = async (req, res, next) => {
         const sess = await mongoose.startSession();
         sess.startTransaction();
 
-        await createdTask.save({ session: sess });
+        await createdTask.save({session: sess});
         user.tasks.push(createdTask);
 
-        await user.save({ session: sess });
+        await user.save({session: sess});
         await sess.commitTransaction();
     } catch (err) {
         console.log(err);
@@ -154,7 +154,7 @@ const deleteTask = async (req, res, next) => {
         return next(error);
     }
 
-    if(!task){
+    if (!task) {
         const error = new HttpError(
             'There is no task with that id', 404
         );
@@ -165,10 +165,10 @@ const deleteTask = async (req, res, next) => {
         const sess = await mongoose.startSession();
         sess.startTransaction();
 
-        await task.remove({ session: sess });
+        await task.remove({session: sess});
         task.creator.tasks.pull(task);
 
-        await task.creator.save({ session: sess });
+        await task.creator.save({session: sess});
         await sess.commitTransaction();
 
     } catch (err) {
