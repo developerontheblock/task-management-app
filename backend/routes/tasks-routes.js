@@ -13,8 +13,11 @@ router.use(checkAuth);
 
 router.post('/', [
     check('title').not().isEmpty(),
-    check('description').isLength({min:10})],
-    tasksContoller.createTask);
+    check('description').isLength({min:10})
+    ],
+    tasksContoller.createTask
+);
+
 router.patch('/:tid', [
     check('title').not().isEmpty(),
     check('description').isLength({min:10})],

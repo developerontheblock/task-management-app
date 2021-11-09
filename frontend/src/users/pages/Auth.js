@@ -34,7 +34,6 @@ const Auth = () => {
     );
 
     const switchModeHandler = () => {
-
         if (!isLoginMode) {
             setFormData({
                     ...formState.inputs, //copy existing fields in form
@@ -100,7 +99,7 @@ const Auth = () => {
             <div>{error}</div>
             <div className="authentication">
                 {isLoading && <LoadingSpinner asOverlay/>}
-                <h2>Login Required</h2>
+                <h2>{isLoginMode ? 'Login' : 'Register'}</h2>
                 <hr/>
                 <form onSubmit={authSubmitHandler}>
                     {!isLoginMode && (
@@ -136,8 +135,10 @@ const Auth = () => {
                         {isLoginMode ? 'LOGIN' : 'SIGNUP'}
                     </Button>
                 </form>
+                {isLoginMode && (<p>Not have an account?</p>)}
+
                 <Button inverse onClick={switchModeHandler}>
-                    SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}
+                    Go to {isLoginMode ? 'SIGNUP' : 'LOGIN'}
                 </Button>
             </div>
         </React.Fragment>
