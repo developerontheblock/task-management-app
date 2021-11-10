@@ -1,0 +1,8 @@
+{
+  "env": {
+    "DB_NAME": "task-management-app",
+    "DB_USER": "user1",
+    "DB_PASSWORD": "user1password",
+    "JWT_KEY": "supersecret"
+  }
+}

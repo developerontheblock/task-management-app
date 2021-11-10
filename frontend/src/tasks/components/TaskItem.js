@@ -12,7 +12,7 @@ const TaskItem = props => {
 
     const confirmDeleteHandler = async () => {
         try {
-            await sendRequest(`http://localhost:5000/api/tasks/${props.id}`,
+            await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/tasks/${props.id}`,
                 'DELETE',
                 null,
                 {

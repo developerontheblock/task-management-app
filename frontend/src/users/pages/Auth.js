@@ -61,7 +61,7 @@ const Auth = () => {
             try {
                 // const response = await fetch(url, {method, headers, body});
                 const responseData = await sendRequest(
-                    'http://localhost:5000/api/users/login',
+                    `${process.env.REACT_APP_BACKEND_URL}/users/login`,
                     'POST',
                     JSON.stringify({
                         email: formState.inputs.email.value,
@@ -80,7 +80,7 @@ const Auth = () => {
                 formData.append('name', formState.inputs.name.value);
                 formData.append('password', formState.inputs.password.value);
                 const responseData = await sendRequest(
-                    'http://localhost:5000/api/users/signup',
+                    `${process.env.REACT_APP_BACKEND_URL}/users/signup`,
                     'POST',
                     formData
                 );

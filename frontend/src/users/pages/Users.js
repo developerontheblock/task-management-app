@@ -12,7 +12,7 @@ const Users = () => {
         const fetchUsers = async () => {
             try {
                 // the default req type with fetch() is GET
-                const responseData = await sendRequest('http://localhost:5000/api/users');
+                const responseData = await sendRequest(process.env.REACT_APP_BACKEND_URL + '/users');
 
                 // the users-key is needed from users-controller from the backend [getUsers]
                 setLoadedUsers(responseData.users);
