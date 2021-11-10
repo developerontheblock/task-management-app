@@ -1,0 +1,230 @@
+{
+	"info": {
+		"_postman_id": "9d2cc358-c197-4dfe-9d29-3c9281ddd0da",
+		"name": "taks-management-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getTaskById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/api/tasks/618b958b8ae3c4704cdbad9a",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						"618b958b8ae3c4704cdbad9a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTaskByUserId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/api/tasks/user/618b95568ae3c4704cdbad99",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						"user",
+						"618b95568ae3c4704cdbad99"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createTask",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MThiOTU1NjhhZTNjNDcwNGNkYmFkOTkiLCJlbWFpbCI6ImFsZXh0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjM2NTM3Njk4LCJleHAiOjE2MzY1NDEyOTh9.E2l_kNZvMQ4JwR0bGldgBRqgPJ8oMQSfR4rW1jextbo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Backend bug\",\n    \"description\": \"This task coitains low priority bug\",\n    \"creator\": \"618b95568ae3c4704cdbad99\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/api/tasks",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateTask",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MThiOTU1NjhhZTNjNDcwNGNkYmFkOTkiLCJlbWFpbCI6ImFsZXh0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjM2NTM3Njk4LCJleHAiOjE2MzY1NDEyOTh9.E2l_kNZvMQ4JwR0bGldgBRqgPJ8oMQSfR4rW1jextbo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Backend bug!\",\n    \"description\": \"This task coitains low priority bug!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/api/tasks/618b958b8ae3c4704cdbad9a",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						"618b958b8ae3c4704cdbad9a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteTask",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MThhNzEzMjZiODI4NTI4Y2QyZjkxMWIiLCJlbWFpbCI6ImFhYUB0ZXN0LmNvbSIsImlhdCI6MTYzNjQ2MjkzNiwiZXhwIjoxNjM2NDY2NTM2fQ.Mi9rRCrM2qv258JIW7r4OW5QQPeR7RhQOv7IMwQtvok",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{localhost}}/api/tasks/618a71b76b828528cd2f911e",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						"618a71b76b828528cd2f911e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUsers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/api/users",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Alex\",\n    \"email\": \"alextest@test.com\",\n    \"password\": \"alextest\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/api/users/signup",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTg4NTMzZmJiMjIyYzUwOWVmZWVlZTciLCJlbWFpbCI6InBlc2hvdGVzdDFAdGVzdC5jb20iLCJpYXQiOjE2MzYzMjQxNTksImV4cCI6MTYzNjMyNzc1OX0.AbqlgRYbO0uVxvNqAsvXfe8C59Rc07gpAY2av5bZ7P4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"alextest@test.com\",\n    \"password\" : \"alextest\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/api/users/login",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
