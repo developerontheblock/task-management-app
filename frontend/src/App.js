@@ -9,6 +9,7 @@ import Auth from './users/pages/Auth';
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import {AuthContext} from "./shared/context/auth-context";
 import {useAuth} from "./shared/hooks/auth-hook";
+import Terms from "./tasks/pages/Terms";
 
 // runs when app starting up
 const App = () => {
@@ -26,6 +27,9 @@ const App = () => {
                 </Route>
                 <Route path="/tasks/new" exact>
                     <NewTask/>
+                </Route>
+                <Route path="/tasks/terms" exact>
+                    <Terms />
                 </Route>
                 <Route path="/tasks/:taskId">
                     <UpdateTask/>

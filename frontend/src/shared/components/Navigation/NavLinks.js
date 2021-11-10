@@ -21,6 +21,11 @@ const NavLinks = props => {
                 <NavLink to="/tasks/new">Add task</NavLink>
             </li>
         )}
+        {auth.isLoggedIn && (
+            <li>
+                <NavLink to="/tasks/terms">Terms and conditions</NavLink>
+            </li>
+        )}
         {!auth.isLoggedIn && (
             <li>
                 <NavLink to="/auth">Log In</NavLink>

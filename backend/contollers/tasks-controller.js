@@ -65,12 +65,12 @@ const createTask = async (req, res, next) => {
     const createdTask = new Task({
         title,
         description,
-        creator: req.userDate.userId
+        creator: req.userData.userId
     });
 
     let user;
     try {
-        user = await User.findById(req.userDate.userId);
+        user = await User.findById(req.userData.userId);
     } catch (err) {
         const error = new HttpError(
             'creating task failed. Try again', 500
